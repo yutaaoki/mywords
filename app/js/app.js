@@ -6,7 +6,7 @@ angular.module('myWordsApp', [
   'ngRoute',
   'myApp.filters',
   'myApp.services',
-  'myApp.directives',
+  'myWordsApp.directives',
   'myWordsApp.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
