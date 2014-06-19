@@ -11,7 +11,6 @@ angular.module('myWordsApp.directives', []).
   }]).
   directive('mainCanvas', function($log) {
     function link(scope, elm, attrs) {
-      $log.log(elm);
       WordCloud(elm[0], { list: [['love', 20], ['hate',10]]});
 
     };
