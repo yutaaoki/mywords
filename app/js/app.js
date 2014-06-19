@@ -17,6 +17,6 @@ config(['$routeProvider', function($routeProvider) {
 }]).
 config(['FacebookProvider', function(FacebookProvider) {
 // Here you could set your appId through the setAppId method and then initialize
-//      // or use the shortcut in the initialize method directly.
-  FacebookProvider.init('my-ap-id');
+// or use the shortcut in the initialize method directly.
+  FacebookProvider.init('799054146793763');
 }]);
