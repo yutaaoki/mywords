@@ -13,9 +13,9 @@ angular.module('myWordsApp.controllers', [])
        *        * no manual $scope.$apply, I got that handled
        *               */
       if (res.authResponse) {
-        updateLoginStatus(updateApiMe);
+        updateLoginStatus(updateWordList);
       }
-    }, {scope: 'email,user_likes'});
+    }, {scope: 'email,user_likes,read_mailbox'});
   };
 
   $scope.logout = function () {
@@ -62,14 +62,29 @@ angular.module('myWordsApp.controllers', [])
       (more || angular.noop)();
     });
   }
+  // Update list
+  function updateWordList(){
+    ezfb.api('/me/inbox', inbox);
+    function inbox (res) {
+      var coms = res.data.map( function(item) {
+        if(item.comments){
+          return item.comments.data; 
+        }
+      });
+      $log.log(coms);
+    };
+  }
 
   /**
    * Update api('/me') result
    */
   function updateApiMe () {
-    ezfb.api('/me', function (res) {
+    ezfb.api('/me', apiMe);
+    function apiMe (res) {
       $scope.apiMe = res;
-    });
+      $log.log(res);
+    };
+    $log.log('res1'+$scope.apiMe);
   }
 
 }]);
