@@ -1,8 +1,8 @@
 
 <h2>Main View</h2>
-<p>{{login}}</p>
-<p>{{getloginstatus}}</p>
-<p>{{name}}</p>
 
-<div main-canvas style="margin-top:200px;height:500px;width:600px"> </div>
+<button class="btn btn-primary" ng-click="login()" ng-disabled="loginStatus.status == 'connected'">Connect with Facebook</button>
+<button class="btn btn-danger" ng-click="logout()" ng-disabled="!loginStatus || loginStatus.status != 'connected'">Logout</button>
+
+<div main-canvas style="margin-top:200px;height:400px;width:600px" me="{{apiMe}}"> </div>
 
