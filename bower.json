@@ -13,6 +13,6 @@
     "html5-boilerplate": "~4.3.0",
     "wordcloud2.js": "",
     "jquery": "~2.1.1",
-    "angular-facebook": "~0.2.x"
+    "angular-easyfb": "~1.0.x"
   }
 }
