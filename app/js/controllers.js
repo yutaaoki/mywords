@@ -92,8 +92,14 @@ angular.module('myWordsApp.controllers', [])
       var message_string = message_string_array.reduce(function(all, st){
         return all + " " + st;
       });
-      $log.log(message_string);
+      //$log.log(message_string);
+      //Calculate frequencies
+      var wordfreq = WordFreq({workerUrl : 'lib/wordfreq/src/wordfreq.worker.js'}).process(message_string, function (list){
+        $scope.wordList = list;
+        $scope.$apply();
+      });
     };
+
   }
 
   /**

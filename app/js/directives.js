@@ -13,8 +13,9 @@ directive('mainCanvas', function($log) {
 
 
   function link(scope, elm, attrs) {
-    scope.$watch('apiMe', function(value){
-      WordCloud(elm[0], { list: [['love', 20], ['hate',10]]});
+    scope.$watch('wordList', function(value){
+      var list = scope.wordList || [['', 0]];;
+      WordCloud(elm[0], { list: list, weightFactor: 5});
     });
   };
 
