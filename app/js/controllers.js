@@ -6,6 +6,8 @@ angular.module('myWordsApp.controllers', [])
 
 .controller('MainCtrl', ['$scope','$log', 'ezfb', function($scope, $log, ezfb) {
 
+  updateLoginStatus(updateWordList);
+
   $scope.login = function () {
     // Calling FB.login with required permissions specified
     ezfb.login(function (res) {
@@ -21,25 +23,8 @@ angular.module('myWordsApp.controllers', [])
   $scope.logout = function () {
      // Calling FB.logout
     ezfb.logout(function () {
-      updateLoginStatus(updateApiMe);
+      updateLoginStatus(updateWordList);
     });
-  };
-
-  $scope.share = function () {
-    ezfb.ui(
-      {
-        method: 'feed',
-        name: 'angular-easyfb API demo',
-        picture: 'http://plnkr.co/img/plunker.png',
-        link: 'http://plnkr.co/edit/qclqht?p=preview',
-        description: 'angular-easyfb is an AngularJS module wrapping Facebook SDK.' + 
-                     ' Facebook integration in AngularJS made easy!' + 
-                     ' Please try it and feel free to give feedbacks.'
-      },
-      function (res) {
-        // res: FB.ui response
-      }
-    );
   };
 
   /**
@@ -100,18 +85,6 @@ angular.module('myWordsApp.controllers', [])
       });
     };
 
-  }
-
-  /**
-   * Update api('/me') result
-   */
-  function updateApiMe () {
-    ezfb.api('/me', apiMe);
-    function apime (res) {
-      $scope.apime = res;
-      $log.log(res);
-    };
-    $log.log('res1'+$scope.apiMe);
   }
 
 }]);
