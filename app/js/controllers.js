@@ -64,14 +64,35 @@ angular.module('myWordsApp.controllers', [])
   }
   // Update list
   function updateWordList(){
-    ezfb.api('/me/inbox', inbox);
+
+    // Get the user ID and save
+    ezfb.api('/me', getId);
+    function getId (res) {
+      var me_id = res.id;
+      $scope.me_id = me_id;
+      ezfb.api('/me/inbox', inbox);
+    };
+
+    // Make a single string from the messages
     function inbox (res) {
-      var coms = res.data.map( function(item) {
-        if(item.comments){
-          return item.comments.data; 
-        }
+      // Filter out undifined entries
+      var clean_coms = res.data.filter(function(e){return e.comments});
+      var com_arrays = clean_coms.map(function(e){return e.comments.data});
+      //$log.log($scope.me_id);
+      var message_string_array = com_arrays.map(function(com_array){
+        //$log.log(com_array);
+        var clean_array = com_array.filter(function(obj){return obj.message && obj.from && obj.from.id &&  obj.from.id == $scope.me_id});
+        //$log.log(clean_array);
+        var message_array = clean_array.map(function(obj){return obj.message});
+        //$log.log(message_array);
+        return message_array.reduce(function(all, st){
+          return all + " " + st;
+        });
       });
-      $log.log(coms);
+      var message_string = message_string_array.reduce(function(all, st){
+        return all + " " + st;
+      });
+      $log.log(message_string);
     };
   }
 
@@ -80,8 +101,8 @@ angular.module('myWordsApp.controllers', [])
    */
   function updateApiMe () {
     ezfb.api('/me', apiMe);
-    function apiMe (res) {
-      $scope.apiMe = res;
+    function apime (res) {
+      $scope.apime = res;
       $log.log(res);
     };
     $log.log('res1'+$scope.apiMe);
