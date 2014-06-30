@@ -44,30 +44,39 @@ angular.module('myWordsApp.controllers', [])
   function updateLoginStatus (more) {
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
-
       (more || angular.noop)();
     });
   }
+
   // Update list
   function updateWordList(){
 
+    // API calls
+    ezfb.api('/'+user, function(res){
+      var user_id = userCallback(res);
+      ezfb.api('/me/inbox', function(res){
+        $log.log(res);
+        var threads = inboxCallback(res, user_id);
+        $log.log(threads);
+      });
+    });
+
     // Get the user ID and save
-    ezfb.api('/'+user, userCallback);
     function userCallback (res) {
-      var me_id = res.id;
-      $scope.me_id = me_id;
-      ezfb.api('/'+user+'/inbox', inboxCallback);
+      return res.id;
     };
 
-    // Make a single string from the messages
-    function inboxCallback (res) {
-      //$log.log(message_string);
-      //Calculate frequencies
-      var message_string = convertToText(res);
-      var wordfreq = WordFreq({workerUrl : 'lib/wordfreq/src/wordfreq.worker.js'}).process(message_string, function (list){
-        $scope.wordList = list;
-        $scope.$apply();
+    // Return an array of thread ids
+    function inboxCallback (res, user_id) {
+      // Filter out irrelevalent threads
+      var userThreads = res.data.filter(function(e){
+        if(e.to && e.to.data){
+          var userData = e.to.data.filter(function(e){return e.id == user_id});
+          return userData.length > 0;
+        }
+        return false;
       });
+      return userThreads.map(function(e){return e.id});
     };
   }
 
@@ -79,14 +88,14 @@ angular.module('myWordsApp.controllers', [])
 
   }
 
-  function convertToText(res){
+  function messageString(res){
     // Filter out undifined entries
     var clean_coms = res.data.filter(function(e){return e.comments});
     var com_arrays = clean_coms.map(function(e){return e.comments.data});
-    //$log.log($scope.me_id);
+    //$log.log($scope.user_id);
     var message_string_array = com_arrays.map(function(com_array){
       //$log.log(com_array);
-      var clean_array = com_array.filter(function(obj){return obj.message && obj.from && obj.from.id &&  obj.from.id == $scope.me_id});
+      var clean_array = com_array.filter(function(obj){return obj.message && obj.from && obj.from.id &&  obj.from.id == $scope.user_id});
       //$log.log(clean_array);
       var message_array = clean_array.map(function(obj){return obj.message});
       //$log.log(message_array);
@@ -97,6 +106,13 @@ angular.module('myWordsApp.controllers', [])
     var message_string = message_string_array.reduce(function(all, st){
       return all + " " + st;
     });
+
+    //Calculate frequencies
+    //var message_string = messageString(res);
+    //var wordfreq = WordFreq({workerUrl : 'lib/wordfreq/src/wordfreq.worker.js'}).process(message_string, function (list){
+     //// $scope.wordList = list;
+     // $scope.$apply();
+    //})
     return message_string;
   }
 
