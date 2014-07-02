@@ -78,6 +78,23 @@ angular.module('myWordsApp.controllers', [])
       });
       return userThreads.map(function(e){return e.id});
     };
+
+    function recursiveThreads(ti, threads){
+      if(threads[ti]){
+        //read thread
+        ezfb.api('/'+threads[it], recursiveMessage);
+      }else{
+        //next step
+      }
+    }
+
+    function recursiveMessages(res, ti, threads){
+
+      // if there's next page
+      ezfb.api('/'+threads[it], recursiveMessage);
+      // if there's no messages left
+      recursiveThreads(ti+1, threads);
+    }
   }
 
   function getComments(res, text){
