@@ -35,17 +35,30 @@ angular.module('myWordsApp.controllers', [])
   }
 }])
 
-.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', function($scope, $log, ezfb, $routeParams, $location) {
+.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http',  function($scope, $log, ezfb, $routeParams, $location, $http) {
 
   //Set 'me' if empty
   var user = $routeParams.user || 'me';
+  var meId;
 
   // Redirect to the login page if not connected
-  ezfb.getLoginStatus(function (res) {
+  ezfb.getLoginStatus()
+  .then(function (res) {
     if(res.status != 'connected'){
       $location.path('/login');
       $location.replace();
     }
+    return ezfb.api('/me');
+  })
+  // Get the user id
+  .then(function (me) {
+    meId = me.id;
+    $scope.meId = meId;
+    return $http.get('http://localhost/wordlist/'+meId).success;
+  })
+  // Get the frequency list
+  .then(function (data) {
+    $scope.frequencyList = data;
   });
 
 }]);
