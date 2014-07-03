@@ -4,7 +4,30 @@
 
 describe('controllers', function(){
 
+  var $scope, mockEzfb;
+
   beforeEach(module('myWordsApp.controllers'));
+  beforeEach(module('ngRoute'));
+
+  beforeEach(function(){
+
+    mockEzfb = {
+      getLoginStatus: function(callback){
+        var res = {
+          status: 'connected'
+        }
+        callback(res);
+      },
+      name: function(){
+        return 'hello';
+      }
+    };
+
+    module(function($provide){
+      $provide.value('ezfb', mockEzfb);
+    });
+  });
+
 
 
   it('creates defined controller', inject(function($controller) {
@@ -13,9 +36,23 @@ describe('controllers', function(){
     expect(mainCtrl).toBeDefined();
   }));
 
-  it('should ....', inject(function($controller) {
+  it('returns the login status as connected', inject(function($controller, ezfb, $log) {
     //spec body
-    var myCtrl2 = $controller('MyCtrl2', { $scope: {} });
-    expect(myCtrl2).toBeDefined();
+    var mainCtrl = $controller('MainCtrl', { $scope: {} });
+    $log.log(ezfb);
+    expect(ezfb.name()).toBe('hello');
   }));
+
+  it('return the location', inject(function($controller, ezfb, $location) {
+    //spec body
+    ezfb.getLoginStatus = function(c){
+      var res = {
+        status: 'connected'
+      }
+      c(res);
+    }
+    var mainCtrl = $controller('MainCtrl', { $scope: {} });
+    expect($location.path()).toBe('');
+  }));
+
 });
