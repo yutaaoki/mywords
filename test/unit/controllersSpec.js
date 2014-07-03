@@ -2,7 +2,7 @@
 
 describe('MainCtrl', function(){
 
-  var scope, ezfb, ctrl, q, deferred;
+  var scope, ezfb, ctrl, $httpBackend;
 
   beforeEach(module('myWordsApp.controllers'));
   beforeEach(module('ngRoute'));
@@ -10,31 +10,32 @@ describe('MainCtrl', function(){
   beforeEach(function(){
 
     var mockEzfb = {
-      getLoginStatus: function() {
-        var res = { status: 'connected' } 
-        deferred = q.defer();
-        deferred.resolve(res);
-        return deferred.promise;
+      getLoginStatus: function(callback){
+        var res = {
+          status: 'connected'
+        }
+        callback(res);
       },
-      api: function(url) {
-        return new Promise(function (fulfill, reject) {
-          data = {'id': 'me_id'};
-          fulfill(data);
-        });
+      api: function(url, callback){
+        var data = {'id': 'me_id'};
+        callback(data);
       }
     };
 
-    module(function($provide) {
+    module(function($provide){
       $provide.value('ezfb', mockEzfb);
     });
 
   });
 
-  beforeEach(inject(function($rootScope, $controller, $q, _ezfb_){
+  beforeEach(inject(function($rootScope, $controller, _ezfb_, _$httpBackend_){
     scope = $rootScope.$new();
-    q = $q;
     ctrl = $controller('MainCtrl', {$scope: scope});
     ezfb = _ezfb_;
+    // HTTP
+    $httpBackend = _$httpBackend_;
+    $httpBackend.expectGET('http://localhost/wordlist/me_id').
+      respond([{'love': 20}, {'hate' : 2}]);
   }));
 
   // Tests //
@@ -46,12 +47,12 @@ describe('MainCtrl', function(){
 
   it('redirects to "login" when not connected', inject(function($controller, $location) {
     // user is not logged in
-    ezfb.getLoginStatus = function() {
-      var res = { status: 'error'};
-      deferred.resolve(res);
-      return deferred.promise;
+    ezfb.getLoginStatus = function(c){
+      var res = {
+        status: 'error'
+      }
+      c(res);
     }
-    scope.$apply();
     // run the controller again
     $controller('MainCtrl', { $scope: scope });
     expect($location.path()).toBe('/login');
@@ -61,8 +62,13 @@ describe('MainCtrl', function(){
     expect($location.path()).toBe('');
   }));
 
-  it("returns the me data", function() {
+  it("returns the me id", function() {
     expect(scope.meId).toBe('me_id');
+  });
+
+  it("returns the freq list", function() {
+    $httpBackend.flush();
+    expect(scope.freqList).toEqual([{'love': 20}, {'hate' : 2}]);
   });
 
 });

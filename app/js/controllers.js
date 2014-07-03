@@ -35,30 +35,40 @@ angular.module('myWordsApp.controllers', [])
   }
 }])
 
-.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http',  function($scope, $log, ezfb, $routeParams, $location, $http) {
+.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http', function($scope, $log, ezfb, $routeParams, $location, $http) {
 
   //Set 'me' if empty
   var user = $routeParams.user || 'me';
   var meId;
 
-  // Redirect to the login page if not connected
-  ezfb.getLoginStatus()
-  .then(function (res) {
+  var checkLoginCB = function(res){
     if(res.status != 'connected'){
       $location.path('/login');
       $location.replace();
     }
-    return ezfb.api('/me');
-  })
-  // Get the user id
-  .then(function (me) {
+  };
+
+  var setMeIdCB = function(me){
+    $scope.meId = me.id;
     meId = me.id;
-    $scope.meId = meId;
-    return $http.get('http://localhost/wordlist/'+meId).success;
-  })
-  // Get the frequency list
-  .then(function (data) {
-    $scope.frequencyList = data;
+  };
+
+  var setFreqListCB = function(list){
+    $scope.freqList = list;
+  };
+
+  // Redirect to the login page if not connected
+  ezfb.getLoginStatus(function (res) {
+    checkLoginCB(res);
+    ezfb.api('/me', function(me) {
+      setMeIdCB(me);
+      $http.get('http://localhost/wordlist/'+meId).success(function(data){
+        setFreqListCB(data);
+      });
+    });
   });
+
+  // Get the frequency list
+
 
 }]);
