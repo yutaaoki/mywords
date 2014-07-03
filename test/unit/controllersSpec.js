@@ -1,25 +1,20 @@
 'use strict';
 
-/* jasmine specs for controllers go here */
+describe('MainCtrl', function(){
 
-describe('controllers', function(){
-
-  var $scope, mockEzfb;
+  var scope, ezfb, ctrl;
 
   beforeEach(module('myWordsApp.controllers'));
   beforeEach(module('ngRoute'));
 
   beforeEach(function(){
 
-    mockEzfb = {
+    var mockEzfb = {
       getLoginStatus: function(callback){
         var res = {
           status: 'connected'
         }
         callback(res);
-      },
-      name: function(){
-        return 'hello';
       }
     };
 
@@ -28,30 +23,33 @@ describe('controllers', function(){
     });
   });
 
-
-
-  it('creates defined controller', inject(function($controller) {
-    //spec body
-    var mainCtrl = $controller('MainCtrl', { $scope: {} });
-    expect(mainCtrl).toBeDefined();
+  beforeEach(inject(function($rootScope, $controller, _ezfb_){
+    scope = $rootScope.$new();
+    ctrl = $controller('MainCtrl', {$scope: scope});
+    ezfb = _ezfb_;
   }));
 
-  it('returns the login status as connected', inject(function($controller, ezfb, $log) {
-    //spec body
-    var mainCtrl = $controller('MainCtrl', { $scope: {} });
-    $log.log(ezfb);
-    expect(ezfb.name()).toBe('hello');
-  }));
+  // Tests //
+  ///////////
 
-  it('return the location', inject(function($controller, ezfb, $location) {
-    //spec body
+  it('has a valid controller', function() {
+    expect(ctrl).toBeDefined();
+  });
+
+  it('redirects to "login" when not connected', inject(function($controller, $location) {
+    // user is not logged in
     ezfb.getLoginStatus = function(c){
       var res = {
-        status: 'connected'
+        status: 'error'
       }
       c(res);
     }
-    var mainCtrl = $controller('MainCtrl', { $scope: {} });
+    // run the controller again
+    $controller('MainCtrl', { $scope: scope });
+    expect($location.path()).toBe('/login');
+  }));
+
+  it("doesn't redirect when connected", inject(function($location) {
     expect($location.path()).toBe('');
   }));
 
