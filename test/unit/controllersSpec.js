@@ -1,5 +1,6 @@
 'use strict';
 
+// MainCtrl test
 describe('MainCtrl', function(){
 
   var scope, ezfb, ctrl, $httpBackend;
