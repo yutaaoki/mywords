@@ -4,35 +4,30 @@
 
 angular.module('myWordsApp.controllers', [])
 
-.controller('LoginCtrl', ['$scope','$log', 'ezfb', function($scope, $log, ezfb) {
-  updateLoginStatus();
+.controller('LoginCtrl', ['$scope','$log', 'ezfb', '$location', function($scope, $log, ezfb, $location) {
   /**
    * Update loginStatus result
    */
-  function updateLoginStatus (more) {
+  var updateLoginStatus = function () {
     ezfb.getLoginStatus(function (res) {
-      $scope.loginstatus = res;
-      (more || angular.noop)();
+      if(res.status == 'connected'){
+        $location.path('/');
+        $location.replace();
+      }
     });
   }
+
+  updateLoginStatus();
+
   $scope.login = function () {
     // Calling FB.login with required permissions specified
     ezfb.login(function (res) {
       if (res.authResponse) {
-        updateLoginStatus(updateWordList);
+        updateLoginStatus();
       }
     }, {scope: 'email,user_likes,read_mailbox'});
   };
   
-  /**
-   * Update loginStatus result
-   */
-  function updateLoginStatus (more) {
-    ezfb.getLoginStatus(function (res) {
-      $scope.loginstatus = res;
-      (more || angular.noop)();
-    });
-  }
 }])
 
 .controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http', function($scope, $log, ezfb, $routeParams, $location, $http) {
