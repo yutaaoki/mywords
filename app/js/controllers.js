@@ -41,6 +41,7 @@ angular.module('myWordsApp.controllers', [])
   var user = $routeParams.user || 'me';
   var meId;
 
+  // Redirect if not logged in
   var checkLoginCB = function(res){
     if(res.status != 'connected'){
       $location.path('/login');
@@ -48,6 +49,7 @@ angular.module('myWordsApp.controllers', [])
     }
   };
 
+  // Remember the user id
   var setMeIdCB = function(me){
     $scope.meId = me.id;
     meId = me.id;
@@ -57,12 +59,12 @@ angular.module('myWordsApp.controllers', [])
     $scope.freqList = list;
   };
 
-  // Redirect to the login page if not connected
+  // Get text and make a freq list
   ezfb.getLoginStatus(function (res) {
     checkLoginCB(res);
     ezfb.api('/me', function(me) {
       setMeIdCB(me);
-      $http.get('http://localhost/wordlist/'+meId).success(function(data){
+      $http.get('http://devaoki2.ubicast.com:9292/messages/'+meId+'?access_token='+res.accessToken).success(function(data){
         setFreqListCB(data);
       });
     });

@@ -4,6 +4,8 @@
 describe('MainCtrl', function(){
 
   var scope, ezfb, ctrl, $httpBackend;
+  var meId = '10204429438402257'; 
+  var messageRes = {"data":" love love love hate hate love hate hate love love love "}
 
   beforeEach(module('myWordsApp.controllers'));
   beforeEach(module('ngRoute'));
@@ -18,7 +20,7 @@ describe('MainCtrl', function(){
         callback(res);
       },
       api: function(url, callback){
-        var data = {'id': 'me_id'};
+        var data = {'id': meId};
         callback(data);
       }
     };
@@ -35,8 +37,8 @@ describe('MainCtrl', function(){
     ezfb = _ezfb_;
     // HTTP
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('http://localhost/wordlist/me_id').
-      respond([{'love': 20}, {'hate' : 2}]);
+    $httpBackend.expectGET('http://devaoki2.ubicast.com:9292/messages/').
+      respond(messageRes);
   }));
 
   // Tests //
@@ -64,12 +66,12 @@ describe('MainCtrl', function(){
   }));
 
   it("returns the me id", function() {
-    expect(scope.meId).toBe('me_id');
+    expect(scope.meId).toBe(meId);
   });
 
   it("returns the freq list", function() {
     $httpBackend.flush();
-    expect(scope.freqList).toEqual([{'love': 20}, {'hate' : 2}]);
+    expect(scope.freqList).toEqual(message_response);
   });
 
 });
