@@ -57,7 +57,8 @@ angular.module('myWordsApp.controllers', [])
     var options = {
       workerUrl: 'lib/wordfreq/src/wordfreq.worker.js',
       filterSubstring: true,
-      minimumCount: 4
+      minimumCount: 4,
+      stopWords: ['im', 'do']
     };
     WordFreq(options)
       .process(data.data, function (list){
