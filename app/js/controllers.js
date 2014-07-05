@@ -59,9 +59,15 @@ angular.module('myWordsApp.controllers', [])
 
   // Make wordfreq list and set it
   var setFreqListCB = function(data){
-    WordFreq({workerUrl: 'lib/wordfreq/src/wordfreq.worker.js'})
+    var options = {
+      workerUrl: 'lib/wordfreq/src/wordfreq.worker.js',
+      filterSubstring: true,
+      minimumCount: 4
+    };
+    WordFreq(options)
       .process(data.data, function (list){
         $scope.freqList = list;
+        $scope.$apply();
       });
   };
 
@@ -73,7 +79,7 @@ angular.module('myWordsApp.controllers', [])
     var accessToken = res.authResponse.accessToken;
     ezfb.api('/me', function(me) {
       setMeIdCB(me);
-      $http.get('http://devaoki2.ubicast.com:9292/messages/'+meId+'?access_token='+accessToken).success(function(data){
+      $http.get('http://mywords.yutaaoki.com/messages/'+meId+'?access_token='+accessToken).success(function(data){
         setFreqListCB(data);
       });
     });

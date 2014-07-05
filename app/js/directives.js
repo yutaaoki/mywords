@@ -13,9 +13,9 @@ directive('mainCanvas', function($log) {
 
 
   function link(scope, elm, attrs) {
-    scope.$watch('wordList', function(value){
-      var list = scope.wordList || [['', 0]];;
-      WordCloud(elm[0], { list: list, weightFactor: 5, origin: [500,400]});
+    scope.$watch('freqList', function(value){
+      var list = scope.freqList || [['', 0]];;
+      WordCloud(elm[0], { list: list, weightFactor: 1, origin: [500,400]});
     });
   };
 
