@@ -46,7 +46,9 @@ angular.module('myWordsApp.controllers', [])
     if(res.status != 'connected'){
       $location.path('/login');
       $location.replace();
+      return false;
     }
+    return true;
   };
 
   // Remember the user id
@@ -55,16 +57,23 @@ angular.module('myWordsApp.controllers', [])
     meId = me.id;
   };
 
-  var setFreqListCB = function(list){
-    $scope.freqList = list;
+  // Make wordfreq list and set it
+  var setFreqListCB = function(data){
+    WordFreq({workerUrl: 'lib/wordfreq/src/wordfreq.worker.js'})
+      .process(data.data, function (list){
+        $scope.freqList = list;
+      });
   };
 
   // Get text and make a freq list
   ezfb.getLoginStatus(function (res) {
-    checkLoginCB(res);
+    if(!checkLoginCB(res)){
+      return;
+    }
+    var accessToken = res.authResponse.accessToken;
     ezfb.api('/me', function(me) {
       setMeIdCB(me);
-      $http.get('http://devaoki2.ubicast.com:9292/messages/'+meId+'?access_token='+res.accessToken).success(function(data){
+      $http.get('http://devaoki2.ubicast.com:9292/messages/'+meId+'?access_token='+accessToken).success(function(data){
         setFreqListCB(data);
       });
     });

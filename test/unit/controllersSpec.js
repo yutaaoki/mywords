@@ -6,6 +6,7 @@ describe('MainCtrl', function(){
   var scope, ezfb, ctrl, $httpBackend;
   var meId = '10204429438402257'; 
   var messageRes = {"data":" love love love hate hate love hate hate love love love "}
+  var accessToken = 'CAALWvEqTcSMBACrCVqMwU2gXnZAc7qHIX2s1ipajCELFFMzfBY8RbvQfjQhtdvZC8jAlpd9ZCkXIZBWdPiES9JaDM6GEIHfdYjqZBDzyx6ZCpD5ApwpldV4WLlTPZCNS3HQolCNEIVhRxfga1Opo5syQOZC7RHYzejb2cNRGi3DX9iiHmsuXYsBKPuQ5lbFDPvIZD'
 
   beforeEach(module('myWordsApp.controllers'));
   beforeEach(module('ngRoute'));
@@ -15,7 +16,8 @@ describe('MainCtrl', function(){
     var mockEzfb = {
       getLoginStatus: function(callback){
         var res = {
-          status: 'connected'
+          status: 'connected',
+          authResponse: {accessToken: accessToken}
         }
         callback(res);
       },
@@ -37,7 +39,7 @@ describe('MainCtrl', function(){
     ezfb = _ezfb_;
     // HTTP
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('http://devaoki2.ubicast.com:9292/messages/').
+    $httpBackend.expectGET('http://devaoki2.ubicast.com:9292/messages/'+meId+'?access_token='+accessToken).
       respond(messageRes);
   }));
 
@@ -71,7 +73,7 @@ describe('MainCtrl', function(){
 
   it("returns the freq list", function() {
     $httpBackend.flush();
-    expect(scope.freqList).toEqual(message_response);
+    expect(scope.freqList).toEqual(messageRes);
   });
 
 });
