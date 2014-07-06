@@ -1,6 +1,6 @@
 # MyWords
 
-## Instllation
+## Installation
 
 Copy app/js/config.js.sample to app/js/config.js. Edit the file to add necessary information.
 
