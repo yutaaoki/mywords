@@ -8,6 +8,7 @@ angular.module('myWordsApp', [
   'myApp.services',
   'myWordsApp.directives',
   'myWordsApp.controllers',
+  'myWordsApp.config',
   'ezfb'
 ]).
 config(['$routeProvider', function($routeProvider) {
@@ -15,8 +16,8 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/cloud/:user', {templateUrl: 'partials/main.html', controller: 'MainCtrl'});
   $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'LoginCtrl'});
   $routeProvider.otherwise({redirectTo: '/'});
-}]).config(function (ezfbProvider) {
+}]).config(['ezfbProvider', 'CONF', function (ezfbProvider, CONF) {
   ezfbProvider.setInitParams({
-    appId: '799054146793763'
+    appId: CONF.appId
   });
-});
+}]);

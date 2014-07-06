@@ -1,0 +1,6 @@
+angular.module('myWordsApp.config', [])
+
+.constant('CONF',{
+  apiUrl: '',
+  appId: ''
+})

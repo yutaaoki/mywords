@@ -30,7 +30,7 @@ angular.module('myWordsApp.controllers', [])
   
 }])
 
-.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http', function($scope, $log, ezfb, $routeParams, $location, $http) {
+.controller('MainCtrl', ['$scope','$log', 'ezfb', '$routeParams', '$location', '$http', 'CONF', function($scope, $log, ezfb, $routeParams, $location, $http, CONF) {
 
   //Set 'me' if empty
   var user = $routeParams.user || 'me';
@@ -75,7 +75,7 @@ angular.module('myWordsApp.controllers', [])
     var accessToken = res.authResponse.accessToken;
     ezfb.api('/me', function(me) {
       setMeIdCB(me);
-      $http.get('http://mywords.yutaaoki.com/messages/'+meId+'?access_token='+accessToken).success(function(data){
+      $http.get(CONF.apiUrl+'/messages/'+meId+'?access_token='+accessToken).success(function(data){
         setFreqListCB(data);
       });
     });
