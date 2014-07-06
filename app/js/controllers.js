@@ -54,19 +54,11 @@ angular.module('myWordsApp.controllers', [])
     meId = me.id;
   };
 
-  // Callback: make wordfreq list and set it
+  // Callback: make the frequency list and set it
   var setFreqListCB = function(data){
 
-    // Additional options
-    var options = {
-      workerUrl: 'lib/wordfreq/src/wordfreq.worker.js',
-      filterSubstring: true,
-      minimumCount: 4,
-      stopWords: ['im', 'do']
-    };
-
     // Analyse the text and make a frequency list
-    WordFreq(options)
+    WordFreq(CONF.options)
       .process(data.data, function (list){
         $scope.freqList = list;
         // Notify the word cloud watcher

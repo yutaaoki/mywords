@@ -8,6 +8,7 @@ module.exports = function(config){
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
       'app/lib/wordfreq/src/wordfreq.js',
+      'app/lib/wordfreq/src/wordfreq.worker.js',
       'app/js/**/*.js',
       'test/unit/**/*.js'
     ],
@@ -28,7 +29,9 @@ module.exports = function(config){
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
-    }
+    },
+
+    logLevel : config.LOG_DEBUG
 
   });
 };
