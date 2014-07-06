@@ -36,7 +36,7 @@ angular.module('myWordsApp.controllers', [])
   var user = $routeParams.user || 'me';
   var meId;
 
-  // Redirect if not logged in
+  // Callback: redirect if not logged in
   var checkLoginCB = function(res){
     if(res.status != 'connected'){
       $location.path('/login');
@@ -46,13 +46,13 @@ angular.module('myWordsApp.controllers', [])
     return true;
   };
 
-  // Remember the user id
+  // Callback: remember the user id
   var setMeIdCB = function(me){
     $scope.meId = me.id;
     meId = me.id;
   };
 
-  // Make wordfreq list and set it
+  // Callback: make wordfreq list and set it
   var setFreqListCB = function(data){
     var options = {
       workerUrl: 'lib/wordfreq/src/wordfreq.worker.js',
@@ -80,8 +80,5 @@ angular.module('myWordsApp.controllers', [])
       });
     });
   });
-
-  // Get the frequency list
-
 
 }]);
