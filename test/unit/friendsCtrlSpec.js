@@ -1,16 +1,13 @@
 'use strict';
 
-// MainCtrl test
-describe('MainCtrl', function(){
+//FriendsCtrl spec
+describe('FriendsCtrl', function(){
 
-  // Shared variables
   var scope, ezfb, ctrl, conf, $httpBackend;
   var meId = '10204429438402257'; 
-  var messageRes = {data: "love love love hate hate love hate hate love love love "}
-  var freqList = {"love":20};
+  var friendsRes = [{"id":"0000","name":"Jack Adams"},{"id":"11111","name":"Yosho Saito"}];
   var accessToken = 'CAALWvEqTcSMBACrCVqMwU2gXnZAc7qHIX2s1ipajCELFFMzfBY8RbvQfjQhtdvZC8jAlpd9ZCkXIZBWdPiES9JaDM6GEIHfdYjqZBDzyx6ZCpD5ApwpldV4WLlTPZCNS3HQolCNEIVhRxfga1Opo5syQOZC7RHYzejb2cNRGi3DX9iiHmsuXYsBKPuQ5lbFDPvIZD'
 
-  // Load modules
   beforeEach(module('myWordsApp.controllers'));
   beforeEach(module('myWordsApp.config'));
   beforeEach(module('ngRoute'));
@@ -46,32 +43,14 @@ describe('MainCtrl', function(){
     ezfb = _ezfb_;
     scope = $rootScope.$new();
 
-    // WordFreq mock
-    WordFreq = function(options){
-      var wordfreq = {};
-      wordfreq.process = function(data, callback){
-        debugger;
-        callback(freqList);
-      }
-      return wordfreq;
-    }
-    scope = $rootScope.$new();
-
     // HTTP mock
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(conf.apiUrl+'/messages/'+meId+'?access_token='+accessToken).
-      respond(messageRes);
+    $httpBackend.whenGET(conf.apiUrl+'/friends/'+meId+'?access_token='+accessToken).
+      respond(friendsRes);
 
     // Create controller
-    ctrl = $controller('MainCtrl', {$scope: scope});
+    ctrl = $controller('FriendsCtrl', {$scope: scope});
   }));
-
-
-  //** Specs **//
-
-  it('has a valid controller', function() {
-    expect(ctrl).toBeDefined();
-  });
 
   it('redirects to "login" when not connected', inject(function($controller, $location) {
     // User is not logged in
@@ -82,7 +61,7 @@ describe('MainCtrl', function(){
       c(res);
     }
     // Run the controller again
-    $controller('MainCtrl', { $scope: scope });
+    $controller('FriendsCtrl', { $scope: scope });
     expect($location.path()).toBe('/login');
   }));
 
@@ -94,11 +73,11 @@ describe('MainCtrl', function(){
     expect(scope.meId).toBe(meId);
   });
 
-  it("returns the freq list", function() {
+  it("returns the frined list", function() {
     // Disable $apply()
     scope.$apply = function(){};
     $httpBackend.flush();
-    expect(scope.freqList).toEqual(freqList);
+    expect(scope.friendList).toEqual(friendsRes);
   });
 
-});
+})

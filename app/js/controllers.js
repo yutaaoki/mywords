@@ -86,4 +86,53 @@ angular.module('myWordsApp.controllers', [])
     });
   });
 
+}])
+
+
+//** Friends Controller **//
+.controller('FriendsCtrl', ['$scope','$log', 'ezfb', '$location', '$http', 'CONF', function($scope, $log, ezfb, $location, $http, CONF) {
+
+  // Callback: redirect if not logged in
+  var checkLoginCB = function(res){
+    if(res.status != 'connected'){
+      $location.path('/login');
+      $location.replace();
+      return false;
+    }
+    return true;
+  };
+
+  // Callback: remember the user id
+  var setMeIdCB = function(me){
+    $scope.meId = me.id;
+  };
+
+  // Callback: get friend list
+  var setFriendListCB = function (data) {
+    $scope.friendList = data;
+  };
+
+
+  // Render the world cloud on load
+  ezfb.getLoginStatus(function (res) {
+    if(!checkLoginCB(res)){
+      return;
+    }
+
+    // Access token to pass to the server
+    var accessToken = res.authResponse.accessToken;
+
+    // Get the user id
+    ezfb.api('/me', function(me) {
+    if(!checkLoginCB(res)){
+      return;
+    }
+      setMeIdCB(me);
+      // Get the message friend list
+      $http.get(CONF.apiUrl+'/friends/'+me.id+'?access_token='+accessToken).success(function(data){
+        setFriendListCB(data);
+      });
+    });
+  });
+
 }]);
