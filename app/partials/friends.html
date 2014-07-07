@@ -1,1 +1,7 @@
 <h2>Friends</h2>
+
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="friend in friendList">
+  <img src="https://graph.facebook.com/{{friend.id}}/picture"/>
+  {{friend.name}}</li>
+</ul>
