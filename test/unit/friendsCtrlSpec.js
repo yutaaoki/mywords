@@ -45,7 +45,7 @@ describe('FriendsCtrl', function(){
 
     // HTTP mock
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(conf.apiUrl+'/friends/'+meId+'?access_token='+accessToken).
+    $httpBackend.whenGET(conf.apiUrl+'/friends/me?access_token='+accessToken).
       respond(friendsRes);
 
     // Create controller

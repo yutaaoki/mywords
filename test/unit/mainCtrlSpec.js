@@ -59,7 +59,7 @@ describe('MainCtrl', function(){
 
     // HTTP mock
     $httpBackend = _$httpBackend_;
-    $httpBackend.whenGET(conf.apiUrl+'/messages/'+meId+'?access_token='+accessToken).
+    $httpBackend.whenGET(conf.apiUrl+'/messages/me?access_token='+accessToken).
       respond(messageRes);
 
     // Create controller

@@ -80,7 +80,7 @@ angular.module('myWordsApp.controllers', [])
       setMeIdCB(me);
 
       // Get the message text
-      $http.get(CONF.apiUrl+'/messages/'+meId+'?access_token='+accessToken).success(function(data){
+      $http.get(CONF.apiUrl+'/messages/me?access_token='+accessToken).success(function(data){
         setFreqListCB(data);
       });
     });
@@ -129,7 +129,7 @@ angular.module('myWordsApp.controllers', [])
     }
       setMeIdCB(me);
       // Get the message friend list
-      $http.get(CONF.apiUrl+'/friends/'+me.id+'?access_token='+accessToken).success(function(data){
+      $http.get(CONF.apiUrl+'/friends/me?access_token='+accessToken).success(function(data){
         setFriendListCB(data);
       });
     });
