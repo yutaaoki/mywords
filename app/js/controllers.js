@@ -36,6 +36,7 @@ angular.module('myWordsApp.controllers', [])
 
   //Set 'me' if empty
   var user = $routeParams.user || 'me';
+  var friendId = $routeParams.friend
   var meId;
 
   // Callback: redirect if not logged in
@@ -59,11 +60,20 @@ angular.module('myWordsApp.controllers', [])
 
     // Analyse the text and make a frequency list
     WordFreq(CONF.options)
-      .process(data.data, function (list){
-        $scope.freqList = list;
+      .process(data[meId], function (list){
+        $scope.meText = list;
         // Notify the word cloud watcher
         $scope.$apply();
       });
+
+    if(friendId){
+      WordFreq(CONF.options)
+        .process(data[friendId], function (list){
+          $scope.friendText = list;
+          // Notify the word cloud watcher
+          $scope.$apply();
+        });
+    }
   };
 
   // Render the world cloud on load

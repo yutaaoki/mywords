@@ -90,15 +90,15 @@ describe('MainCtrl', function(){
     expect($location.path()).toBe('');
   }));
 
-  it("returns the me id", function() {
+  it("contains the me id", function() {
     expect(scope.meId).toBe(meId);
   });
 
-  it("returns the freq list", function() {
+  it("contains meText", function() {
     // Disable $apply()
     scope.$apply = function(){};
     $httpBackend.flush();
-    expect(scope.freqList).toEqual(freqList);
+    expect(scope.meText).toEqual(freqList);
   });
 
 });
