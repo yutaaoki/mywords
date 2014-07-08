@@ -12,9 +12,9 @@ angular.module('myWordsApp', [
 // App config
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {templateUrl: 'partials/main.html', controller: 'MainCtrl'});
-  $routeProvider.when('/cloud/:user', {templateUrl: 'partials/main.html', controller: 'MainCtrl'});
-  $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'LoginCtrl'});
   $routeProvider.when('/friends', {templateUrl: 'partials/friends.html', controller: 'FriendsCtrl'});
+  $routeProvider.when('/:friend', {templateUrl: 'partials/main.html', controller: 'MainCtrl'});
+  $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'LoginCtrl'});
   $routeProvider.otherwise({redirectTo: '/'});
 }])
 

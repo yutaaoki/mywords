@@ -61,7 +61,7 @@ angular.module('myWordsApp.controllers', [])
     // Analyse the text and make a frequency list
     WordFreq(CONF.options)
       .process(data[meId], function (list){
-        $scope.meText = list;
+        $scope.meList = list;
         // Notify the word cloud watcher
         $scope.$apply();
       });
@@ -69,7 +69,7 @@ angular.module('myWordsApp.controllers', [])
     if(friendId){
       WordFreq(CONF.options)
         .process(data[friendId], function (list){
-          $scope.friendText = list;
+          $scope.friendList = list;
           // Notify the word cloud watcher
           $scope.$apply();
         });
@@ -90,9 +90,17 @@ angular.module('myWordsApp.controllers', [])
       setMeIdCB(me);
 
       // Get the message text
-      $http.get(CONF.apiUrl+'/messages/me?access_token='+accessToken).success(function(data){
-        setFreqListCB(data);
-      });
+      if(friendId){
+        $http.get(CONF.apiUrl+'/messages/me/'+friendId+'?access_token='+accessToken).success(function(data){
+          setFreqListCB(data);
+        });
+      }
+      else{
+        $http.get(CONF.apiUrl+'/messages/me?access_token='+accessToken).success(function(data){
+          setFreqListCB(data);
+        });
+      }
+      
     });
   });
 

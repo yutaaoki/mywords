@@ -9,9 +9,9 @@ angular.module('myWordsApp.directives', [])
   function link(scope, elm, attrs) {
 
     // Render the  word cloud
-    scope.$watch('meText', function(value){
-      var list = scope.meText || [['', 0]];;
-      WordCloud(elm[0], { list: list, weightFactor: 1, origin: [500,400]});
+    scope.$watch(attrs.list, function(value){
+      var list = scope[attrs.list] || [['', 0]];;
+      WordCloud(elm[0], { list: list, weightFactor: 1, origin: [attrs.originx, attrs.originy]});
     });
   };
 

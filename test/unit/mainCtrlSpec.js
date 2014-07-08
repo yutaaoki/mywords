@@ -98,7 +98,7 @@ describe('MainCtrl', function(){
     // Disable $apply()
     scope.$apply = function(){};
     $httpBackend.flush();
-    expect(scope.meText).toEqual(freqList);
+    expect(scope.meList).toEqual(freqList);
   });
 
 });
