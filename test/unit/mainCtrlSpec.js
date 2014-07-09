@@ -4,10 +4,14 @@
 describe('MainCtrl', function(){
 
   // Shared variables
-  var scope, ezfb, ctrl, conf, $httpBackend;
+  var scope, ezfb, ctrl, conf, $httpBackend, $routeParams;
   var meId = '10204429438402257'; 
-  var messageRes = {data: "love love love hate hate love hate hate love love love "}
+  var friendId = '1020442943840000'; 
+  var messageRes = {data: "love love love hate hate love hate hate love love love "};
+  var friendRes = {};
+  friendRes[friendId] = "friend";
   var freqList = {"love":20};
+  var friendList = {"friend":20};
   var accessToken = 'CAALWvEqTcSMBACrCVqMwU2gXnZAc7qHIX2s1ipajCELFFMzfBY8RbvQfjQhtdvZC8jAlpd9ZCkXIZBWdPiES9JaDM6GEIHfdYjqZBDzyx6ZCpD5ApwpldV4WLlTPZCNS3HQolCNEIVhRxfga1Opo5syQOZC7RHYzejb2cNRGi3DX9iiHmsuXYsBKPuQ5lbFDPvIZD'
 
   // Load modules
@@ -40,18 +44,22 @@ describe('MainCtrl', function(){
   });
 
   // Inject
-  beforeEach(inject(function($rootScope,_$httpBackend_, $controller, _ezfb_, CONF){
+  beforeEach(inject(function($rootScope,_$httpBackend_, $controller, _$routeParams_,_ezfb_, CONF){
 
     conf = CONF;
     ezfb = _ezfb_;
     scope = $rootScope.$new();
+    $routeParams = _$routeParams_;
 
     // WordFreq mock
     WordFreq = function(options){
       var wordfreq = {};
       wordfreq.process = function(data, callback){
-        debugger;
-        callback(freqList);
+        if(data === 'friend'){
+          callback(friendList);
+        }else{
+          callback(freqList);
+        }
       }
       return wordfreq;
     }
@@ -61,6 +69,8 @@ describe('MainCtrl', function(){
     $httpBackend = _$httpBackend_;
     $httpBackend.whenGET(conf.apiUrl+'/messages/me?access_token='+accessToken).
       respond(messageRes);
+    $httpBackend.whenGET(conf.apiUrl+'/messages/me/'+friendId+'?access_token='+accessToken).
+      respond(friendRes);
 
     // Create controller
     ctrl = $controller('MainCtrl', {$scope: scope});
@@ -94,11 +104,20 @@ describe('MainCtrl', function(){
     expect(scope.meId).toBe(meId);
   });
 
-  it("contains meText", function() {
+  it("contains me freq list", function() {
     // Disable $apply()
     scope.$apply = function(){};
     $httpBackend.flush();
-    expect(scope.meList).toEqual(freqList);
+    expect(scope.list1).toEqual(freqList);
   });
+
+  it("contains friend freq list", inject(function($controller) {
+    $routeParams.friend = friendId;
+    // Disable $apply()
+    $controller('MainCtrl', { $scope: scope });
+    scope.$apply = function(){};
+    $httpBackend.flush();
+    expect(scope.list1).toEqual(friendList);
+  }));
 
 });
