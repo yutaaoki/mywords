@@ -37,7 +37,7 @@ angular.module('myWordsApp.controllers', [])
   //Set 'me' if empty
   var user = $routeParams.user || 'me';
   var friendId = $routeParams.friend
-  var meId;
+  var meId, meName;
 
   // Callback: redirect if not logged in
   var checkLoginCB = function(res){
@@ -53,7 +53,14 @@ angular.module('myWordsApp.controllers', [])
   var setMeIdCB = function(me){
     $scope.meId = me.id;
     meId = me.id;
+    meName = me.name;
   };
+
+  // Callback: get friend's name
+  var setFriendNameCB = function(friend){
+    $scope.name1 = friend.name;
+    $scope.id1 = friend.id;
+  }
 
   // Callback: make the frequency list and set it
   var setFreqListCB = function(data, userId, listName){
@@ -84,11 +91,17 @@ angular.module('myWordsApp.controllers', [])
         $http.get(CONF.apiUrl+'/messages/me/'+friendId+'?access_token='+accessToken).success(function(data){
           setFreqListCB(data, friendId, 'list1');
           setFreqListCB(data, meId, 'list2');
+          $scope.name2 = meName;
+          $scope.id2 = meId;
+          ezfb.api(friendId, function(friend){
+            setFriendNameCB(friend);
+          });
         });
       }
       else{
         $http.get(CONF.apiUrl+'/messages/me?access_token='+accessToken).success(function(data){
           setFreqListCB(data, meId, 'list1');
+          $scope.name1 = meName;
         });
       }
       
