@@ -1,5 +1,11 @@
 // Server config
 angular.module('myWordsApp.config', []).constant('CONF',{
   apiUrl: '',
-  appId: ''
+  appId: '',
+  options:  {
+    workerUrl: 'lib/wordfreq/src/wordfreq.worker.js',
+    filterSubstring: true,
+    minimumCount: 4,
+    stopWords: ['im', 'do']
+  }
 })
