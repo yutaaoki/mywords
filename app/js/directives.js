@@ -1,21 +1,17 @@
 'use strict';
 
-/* Directives */
+// Directives
+angular.module('myWordsApp.directives', [])
 
-
-angular.module('myWordsApp.directives', []).
-directive('appVersion', ['version', function(version) {
-  return function(scope, elm, attrs) {
-    elm.text(version);
-  };
-}]).
-directive('mainCanvas', function($log) {
-
+//** Main Canvas **//
+.directive('mainCanvas', function($log) {
 
   function link(scope, elm, attrs) {
-    scope.$watch('freqList', function(value){
-      var list = scope.freqList || [['', 0]];;
-      WordCloud(elm[0], { list: list, weightFactor: 1, origin: [500,400]});
+
+    // Render the  word cloud
+    scope.$watch(attrs.list, function(value){
+      var list = scope[attrs.list] || [['', 0]];;
+      WordCloud(elm[0], { list: list, weightFactor: 1, origin: [attrs.originx, attrs.originy]});
     });
   };
 

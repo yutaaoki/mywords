@@ -1,7 +1,10 @@
-<h2>MyWords</h2>
-<div ng-show="!freqList">
+<h2>{{name1}} <span ng-show="name2"> × {{name2}}</span></h2>
+
+<div ng-show="!list1 && !list2">
   <p>Loading... Can take a couple of minuites.</p>
   <img src="./img/loading.gif"/>
 </div>
 
-<div main-canvas style="margin-top:100px;height:1100px;width:1920px"> </div>
+<div main-canvas list="list1" originx="500" originy="400" style="margin-top:100px;height:1400px;width:1920px"> </div>
+
+<div main-canvas list="list2" originx="500" originy="800" style="margin-top:100px;height:1400px;width:1920px"> </div>
