@@ -5,15 +5,12 @@
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="myWordsApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>My Words</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <script src="bower_components/wordcloud2.js/src/wordcloud2.js"></script>
   <script src="lib/wordfreq/src/wordfreq.js"></script>
 </head>
@@ -21,7 +18,15 @@
 
   <div class="navbar navbar-default">
     <div class="container-fluid">
-      <div class="collapse navbar-collapse navbar-responsive-collapse">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-bar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse navbar-responsive-collapse" id="main-bar">
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
           <li><a href="#/friends">Friends</a></li>
