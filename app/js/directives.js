@@ -18,9 +18,12 @@ angular.module('myWordsApp.directives', [])
           return e[1];
         }
       })
-      var maxSize = sizeArray.reduce(function(pre, cur){
-        return (cur > pre) ? cur : pre;
-      });
+      var maxSize = 1;
+      if(sizeArray.length > 0){
+        var maxSize = sizeArray.reduce(function(pre, cur){
+          return (cur > pre) ? cur : pre;
+        });
+      }
       // Compute the factor so that the cloud won't
       // be too small
       var factor = maxSize > 45 ? 1 : Math.floor(90 / maxSize);
